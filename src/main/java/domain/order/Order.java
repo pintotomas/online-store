@@ -18,6 +18,8 @@ public class Order {
     private Long id;
 
     @OneToMany(targetEntity=Product.class, fetch= FetchType.EAGER)
+    @JoinTable(name = "order_product", joinColumns =
+    @JoinColumn(name = "id_order"))
     private List<Product> productList;
 
     public Order(Cart cart) {

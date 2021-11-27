@@ -18,6 +18,8 @@ public class Cart {
     private Long id;
 
     @OneToMany(targetEntity=Product.class, fetch= FetchType.EAGER)
+    @JoinTable(name = "cart_product", joinColumns =
+    @JoinColumn(name = "id_cart"))
     private List<Product> productList;
 
     @NotNull
