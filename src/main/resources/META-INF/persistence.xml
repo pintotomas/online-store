@@ -6,16 +6,17 @@
     <persistence-unit name="online-cart">
 
         <properties>
-            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:student-info"/>
-            <property name="javax.persistence.jdbc.user" value="sa"/>
-            <property name="javax.persistence.jdbc.password" value=""/>
+            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/store"/>
+            <property name="javax.persistence.jdbc.user" value="store"/>
+            <property name="javax.persistence.jdbc.password" value="store"/>
             <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true" /> <!-- Show SQL formatted -->
             <property name="javax.persistence.schema-generation.database.action" value="create"/>
             <property name="javax.persistence.schema-generation.create-source" value="script"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL95Dialect"/> <!-- DB Dialect -->
             <property name="javax.persistence.schema-generation.create-script-source"
                       value="schema.sql" />
-            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL95Dialect"/> <!-- DB Dialect -->
             <property name="javax.persistence.sql-load-script-source" value="data.sql"/>
         </properties>
 

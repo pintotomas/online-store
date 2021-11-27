@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Data
+@Table(name="product_order")
 public class Order {
     @Id
     private Long id;
