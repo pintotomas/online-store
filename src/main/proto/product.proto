@@ -11,12 +11,20 @@ message ProductRequest {
     int64 id = 1;
 }
 
+message ProductsRequest {
+    repeated int64 id = 1;
+}
+
 message ProductResponse {
     int64 id = 1;
     string label = 2;
     Type type = 3;
     string url = 4;
     int64 weight = 5;
+}
+
+message ProductsResponse {
+  repeated ProductResponse productResponse = 1;
 }
 
 enum Type {
@@ -29,4 +37,7 @@ enum Type {
 // Now let's define our service
 service ProductService {
   rpc getOneProduct(ProductRequest) returns (ProductResponse);
+
+  rpc getProducts(ProductsRequest) returns (ProductsResponse);
+
 }
