@@ -16,11 +16,16 @@ import java.util.logging.Logger;
 
 public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBase {
 
-    private DigitalProductDao digitalProductDao = new DigitalProductDao();
-
-    private PhysicalProductDao physicalProductDao = new PhysicalProductDao();
-
     private static final Logger logger = Logger.getLogger(ProductServiceImpl.class.getName());
+
+    private DigitalProductDao digitalProductDao;
+
+    private PhysicalProductDao physicalProductDao;
+
+    public ProductServiceImpl(DigitalProductDao digitalProductDao, PhysicalProductDao physicalProductDao) {
+        this.digitalProductDao = digitalProductDao;
+        this.physicalProductDao = physicalProductDao;
+    }
 
     private void setCommonProductResponse(Product product, ProductDetailResponse.Builder productResponse) {
         Category category = Category.newBuilder().setId(product.getCategory().getId())

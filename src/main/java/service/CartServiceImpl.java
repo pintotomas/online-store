@@ -24,9 +24,13 @@ import java.util.logging.Logger;
 
 public class CartServiceImpl extends CartServiceGrpc.CartServiceImplBase {
 
-    private CartDao cartDao = new CartDao();
+    private CartDao cartDao;
 
     private static final Logger logger = Logger.getLogger(CartServiceImpl.class.getName());
+
+    public CartServiceImpl(CartDao cartDao) {
+        this.cartDao = cartDao;
+    }
 
     private void sendCartResponse(domain.cart.Cart cart, StreamObserver<Cart> streamObserver) {
         Cart.Builder response = Cart.newBuilder();

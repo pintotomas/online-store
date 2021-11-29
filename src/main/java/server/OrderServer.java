@@ -1,5 +1,6 @@
 package server;
 
+import dao.OrderDao;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import service.OrderServiceImpl;
@@ -14,8 +15,10 @@ public class OrderServer {
 
     public static void main(String[] args) {
 
+        OrderDao orderDao = new OrderDao();
+
         Server server = ServerBuilder.forPort(8082)
-                .addService(new OrderServiceImpl())
+                .addService(new OrderServiceImpl(orderDao))
                 .build();
         try {
             server.start();

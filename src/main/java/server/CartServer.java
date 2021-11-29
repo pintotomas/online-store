@@ -1,5 +1,6 @@
 package server;
 
+import dao.CartDao;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import service.CartServiceImpl;
@@ -14,8 +15,10 @@ public class CartServer {
 
     public static void main(String[] args) {
 
+        CartDao cartDao = new CartDao();
+
         Server server = ServerBuilder.forPort(8081)
-                .addService(new CartServiceImpl())
+                .addService(new CartServiceImpl(cartDao))
                 .build();
         try {
             server.start();

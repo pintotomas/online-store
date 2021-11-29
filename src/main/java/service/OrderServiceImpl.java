@@ -28,7 +28,11 @@ import java.util.stream.Collectors;
 
 public class OrderServiceImpl extends OrderServiceGrpc.OrderServiceImplBase {
 
-    private OrderDao orderDao = new OrderDao();
+    private OrderDao orderDao;
+
+    public OrderServiceImpl(OrderDao orderDao) {
+        this.orderDao = orderDao;
+    }
 
     private static final Logger logger = Logger.getLogger(OrderServiceImpl.class.getName());
 

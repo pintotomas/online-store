@@ -1,5 +1,7 @@
 package server;
 
+import dao.DigitalProductDao;
+import dao.PhysicalProductDao;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import service.ProductServiceImpl;
@@ -14,8 +16,13 @@ public class ProductServer {
 
     public static void main(String[] args) {
 
+
+        DigitalProductDao digitalProductDao = new DigitalProductDao();
+
+        PhysicalProductDao physicalProductDao = new PhysicalProductDao();
+
         Server server = ServerBuilder.forPort(8080)
-                .addService(new ProductServiceImpl())
+                .addService(new ProductServiceImpl(digitalProductDao, physicalProductDao))
                 .build();
         try {
             server.start();
