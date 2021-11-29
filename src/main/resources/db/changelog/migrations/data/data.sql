@@ -1,3 +1,6 @@
+--liquibase formatted sql
+
+--changeset tomas:2021112801
 insert into digital_product (id, label, type, url) values (1, 'Petit Baguette', 'SPECIALITY_PRODUCTS', 'http://goo.gl/posuere.js');
 insert into digital_product (id, label, type, url) values (2, 'Tart Shells - Savory, 2', 'SPECIALITY_PRODUCTS', 'https://java.com/neque/aenean/auctor/gravida.xml');
 insert into digital_product (id, label, type, url) values (3, 'Nut - Peanut, Roasted', 'SPECIALITY_PRODUCTS', 'https://sitemeter.com/dolor/morbi/vel.jpg');
@@ -9,7 +12,7 @@ insert into digital_product (id, label, type, url) values (8, 'Sunflower Seed Ra
 insert into digital_product (id, label, type, url) values (9, 'Flour - All Purpose', 'SPECIALITY_PRODUCTS', 'http://auda.org.au/rutrum.json');
 insert into digital_product (id, label, type, url) values (10, 'Dried Peach', 'SPECIALITY_PRODUCTS', 'http://gmpg.org/aenean.xml');
 
-
+--changeset tomas:2021112802
 insert into physical_product (id, label, type, weight) values (11, 'Bar Special K', 'SHOPPING_GOODS', 5.3);
 insert into physical_product (id, label, type, weight) values (12, 'Pate - Cognac', 'SHOPPING_GOODS', 50.97);
 insert into physical_product (id, label, type, weight) values (13, 'Glove - Cutting', 'SHOPPING_GOODS', 35.34);
