@@ -14,6 +14,9 @@ public class CartClient {
         cartServiceBlockingStub = CartServiceGrpc.newBlockingStub(channel);
     }
 
+    /**
+     * @return CartProductsDto object containing all the product's ids in the cart
+     */
     public CartProductsDto finishCart() {
         Cart cart = cartServiceBlockingStub.finishCart(com.google.protobuf.Empty.newBuilder().build());
         return new CartProductsDto(cart);

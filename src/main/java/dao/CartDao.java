@@ -14,6 +14,9 @@ public class CartDao {
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("online-cart");
     EntityManager em = emf.createEntityManager();
 
+    /**
+     * @return A cart if one is found with status PENDING
+     */
     public Optional<Cart> getPending() {
         //Returns current cart with pending status
         Status status = Status.PENDING;
@@ -24,6 +27,10 @@ public class CartDao {
         else return Optional.ofNullable(carts.get(0));
     }
 
+    /**
+     * @param cart A Cart object
+     * @return The saved Cart
+     */
     public Cart save(Cart cart) {
         em.getTransaction().begin();
         if (!em.contains(cart)) {

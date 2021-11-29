@@ -9,6 +9,10 @@ import java.util.Optional;
 
 public class PhysicalProductDao {
 
+    /**
+     * @param id The physical product ID
+     * @return A PhysicalProduct Object if its found with the given ID
+     */
     public Optional<PhysicalProduct> findById(Long id){
 
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("online-cart");

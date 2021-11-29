@@ -11,6 +11,10 @@ public class OrderDao {
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("online-cart");
     EntityManager em = emf.createEntityManager();
 
+    /**
+     * @param order
+     * @return
+     */
     public Order save(Order order) {
         em.getTransaction().begin();
         if (!em.contains(order)) {
@@ -21,6 +25,10 @@ public class OrderDao {
         return order;
     }
 
+    /**
+     * @param id
+     * @return
+     */
     public Optional<Order> findById(Long id) {
 
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("online-cart");

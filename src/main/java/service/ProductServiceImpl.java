@@ -7,6 +7,7 @@ import domain.product.DigitalProduct;
 import domain.product.PhysicalProduct;
 import domain.product.Product;
 import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 
 import java.util.List;
@@ -37,6 +38,11 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
         productResponse.setType(Type.valueOf(product.getType().name()));
     }
 
+    /**
+     * @param request a ProductRequest proto message containing the product id to search
+     * @param responseObserver a stream where the ProductDetailResponse proto message will be set
+     * @throws StatusRuntimeException when the product is not found
+     */
     @Override
     public void getOneProduct(ProductRequest request, StreamObserver<ProductDetailResponse> responseObserver) {
         Long productId = request.getId();
@@ -64,6 +70,11 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
         }
     }
 
+    /**
+     * @param request a ProductsRequest proto message containing the product ids to search
+     * @param responseObserver a stream where the ProductsDetailResponse proto message will be set
+     * @throws StatusRuntimeException when any product is not found
+     */
     @Override
     public void getProducts(ProductsRequest request, StreamObserver<ProductsDetailResponse> responseObserver) {
         List<Long> ids = request.getIdList();

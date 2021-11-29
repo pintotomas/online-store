@@ -8,6 +8,10 @@ import javax.persistence.Persistence;
 import java.util.Optional;
 
 public class DigitalProductDao {
+    /**
+     * @param id The product ID
+     * @return A DigitalProduct Object if its found with the given ID
+     */
     public Optional<DigitalProduct> findById(Long id){
 
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("online-cart");

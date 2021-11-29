@@ -18,6 +18,7 @@ import dto.ProductDetailDto;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 
 import java.util.List;
@@ -37,6 +38,11 @@ public class OrderServiceImpl extends OrderServiceGrpc.OrderServiceImplBase {
     private static final Logger logger = Logger.getLogger(OrderServiceImpl.class.getName());
 
 
+    /**
+     * @param orderRequest a orderRequest proto message containing the order id to obtain
+     * @param orderResponseStreamObserver a stream where the OrderResponse proto message will be set
+     * @throws StatusRuntimeException when the order is not found
+     */
     @Override
     public void getOne(OrderRequest orderRequest, StreamObserver<OrderResponse> orderResponseStreamObserver) {
         Long orderId = orderRequest.getId();
@@ -67,30 +73,39 @@ public class OrderServiceImpl extends OrderServiceGrpc.OrderServiceImplBase {
 
     }
 
+    /**
+     * @param request an empty Proto request
+     * @param orderResponseStreamObserver a stream where the OrderResponse proto message will be set
+     */
     @Override
     public void create(com.google.protobuf.Empty request, StreamObserver<OrderResponse> orderResponseStreamObserver) {
 
-        List<Product> products = obtainProductsFromCart();
-        Order order = new Order(products);
-        order = orderDao.save(order);
-        OrderResponse.Builder orderResponse = OrderResponse.newBuilder();
-        ProductsResponse.Builder productsResponse = ProductsResponse.newBuilder();
-        for (Product product : order.getProductList()) {
-            Category category = Category.newBuilder().setId(product.getCategory().getId())
-                    .setLabel(product.getCategory().getLabel())
-                    .setIdParent(product.getCategory().getParentId()).build();
-            productsResponse.addProductResponse(
-                    ProductResponse.newBuilder()
-                            .setId(product.getId())
-                            .setLabel(product.getLabel())
-                            .setCategory(category)
-                            .setType(Type.valueOf(product.getType().name())).build()
-            );
+        try {
+            List<Product> products = obtainProductsFromCart();
+            Order order = new Order(products);
+            order = orderDao.save(order);
+            OrderResponse.Builder orderResponse = OrderResponse.newBuilder();
+            ProductsResponse.Builder productsResponse = ProductsResponse.newBuilder();
+            for (Product product : order.getProductList()) {
+                Category category = Category.newBuilder().setId(product.getCategory().getId())
+                        .setLabel(product.getCategory().getLabel())
+                        .setIdParent(product.getCategory().getParentId()).build();
+                productsResponse.addProductResponse(
+                        ProductResponse.newBuilder()
+                                .setId(product.getId())
+                                .setLabel(product.getLabel())
+                                .setCategory(category)
+                                .setType(Type.valueOf(product.getType().name())).build()
+                );
+            }
+            orderResponse.setProductsResponse(productsResponse.build());
+            orderResponse.setId(order.getId());
+            orderResponseStreamObserver.onNext(orderResponse.build());
+            orderResponseStreamObserver.onCompleted();
+        } catch (StatusRuntimeException statusRuntimeException) {
+            logger.log(Level.SEVERE, statusRuntimeException.getLocalizedMessage());
+            orderResponseStreamObserver.onError(statusRuntimeException);
         }
-        orderResponse.setProductsResponse(productsResponse.build());
-        orderResponse.setId(order.getId());
-        orderResponseStreamObserver.onNext(orderResponse.build());
-        orderResponseStreamObserver.onCompleted();
     }
 
     private List<Product> obtainProductsFromCart() {

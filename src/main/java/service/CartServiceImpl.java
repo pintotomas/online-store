@@ -55,6 +55,11 @@ public class CartServiceImpl extends CartServiceGrpc.CartServiceImplBase {
         streamObserver.onCompleted();
     }
 
+    /**
+     * @param request an empty Proto request
+     * @param streamObserver a stream where the Cart proto message will be set
+     * @throws StatusRuntimeException when no cart exists or its empty
+     */
     @Override
     public void finishCart(com.google.protobuf.Empty request, StreamObserver<Cart> streamObserver) {
         Optional<domain.cart.Cart> optionalCart = cartDao.getPending();
@@ -74,6 +79,10 @@ public class CartServiceImpl extends CartServiceGrpc.CartServiceImplBase {
         sendCartResponse(cart, streamObserver);
     }
 
+    /**
+     * @param request an empty Proto request
+     * @param streamObserver a stream where the Cart proto message will be set
+     */
     @Override
     public void getCart(com.google.protobuf.Empty request, StreamObserver<Cart> streamObserver) {
         Optional<domain.cart.Cart> optionalCart = cartDao.getPending();
@@ -83,6 +92,11 @@ public class CartServiceImpl extends CartServiceGrpc.CartServiceImplBase {
     }
 
 
+    /**
+     * @param addProductRequest addProductRequest proto message with the id of the product to add to the cart
+     * @param streamObserver a stream where the Cart proto message will be set
+     * @throws StatusRuntimeException when a product is not found
+     */
     @Override
     public void addOneProduct(AddProductRequest addProductRequest, StreamObserver<Cart> streamObserver) {
         Optional<domain.cart.Cart> optionalCart = cartDao.getPending();
