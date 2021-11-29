@@ -1,6 +1,7 @@
 package service;
 
 import client.ProductClient;
+import com.online_store.stubs.product.Category;
 import com.online_store.stubs.product.ProductResponse;
 import com.online_store.stubs.product.ProductsResponse;
 import com.online_store.stubs.product.Type;
@@ -33,9 +34,13 @@ public class CartServiceImpl extends CartServiceGrpc.CartServiceImplBase {
         response.setStatus(Status.valueOf(cart.getStatus().name()));
         ProductsResponse.Builder productsResponse = ProductsResponse.newBuilder();
         for (Product product : cart.getProductList()) {
+            Category category = Category.newBuilder().setId(product.getCategory().getId())
+                    .setLabel(product.getCategory().getLabel())
+                    .setIdParent(product.getCategory().getParentId()).build();
             productsResponse.addProductResponse(
                     ProductResponse.newBuilder()
                             .setId(product.getId())
+                            .setCategory(category)
                             .setLabel(product.getLabel())
                             .setType(Type.valueOf(product.getType().name())).build()
             );

@@ -23,6 +23,10 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
     private static final Logger logger = Logger.getLogger(ProductServiceImpl.class.getName());
 
     private void setCommonProductResponse(Product product, ProductDetailResponse.Builder productResponse) {
+        Category category = Category.newBuilder().setId(product.getCategory().getId())
+                .setLabel(product.getCategory().getLabel())
+                .setIdParent(product.getCategory().getParentId()).build();
+        productResponse.setCategory(category);
         productResponse.setId(product.getId());
         productResponse.setLabel(product.getLabel());
         productResponse.setType(Type.valueOf(product.getType().name()));

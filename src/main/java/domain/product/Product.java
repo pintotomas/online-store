@@ -1,6 +1,7 @@
 package domain.product;
 
 import com.sun.istack.NotNull;
+import domain.category.Category;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,4 +27,9 @@ public abstract class Product implements Serializable {
     @Enumerated(EnumType.STRING)
     @NotNull
     private Type type;
+
+    @OneToOne
+    @NotNull
+    @JoinColumn(name = "id_category")
+    private Category category;
 }

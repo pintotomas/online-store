@@ -9,6 +9,7 @@ public class ProductFactory {
         product.setId(productDetailDto.getId());
         product.setLabel(productDetailDto.getLabel());
         product.setType(productDetailDto.getType());
+        product.setCategory(productDetailDto.getCategory());
     }
 
     public static Product createProduct(ProductDetailDto productDetailDto) {

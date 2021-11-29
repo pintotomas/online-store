@@ -8,6 +8,12 @@ message ProductRequest {
     int64 id = 1;
 }
 
+message Category {
+    int64 id = 1;
+    string label = 2;
+    int64 id_parent = 3;
+}
+
 message ProductsRequest {
     repeated int64 id = 1;
 }
@@ -18,12 +24,14 @@ message ProductDetailResponse {
     Type type = 3;
     string url = 4;
     int64 weight = 5;
+    Category category = 6;
 }
 
 message ProductResponse {
     int64 id = 1;
     string label = 2;
     Type type = 3;
+    Category category = 4;
 }
 
 message ProductsDetailResponse {

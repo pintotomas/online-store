@@ -2,6 +2,7 @@ package service;
 
 import client.CartClient;
 import client.ProductClient;
+import com.online_store.stubs.product.Category;
 import com.online_store.stubs.product.ProductResponse;
 import com.online_store.stubs.product.ProductsResponse;
 import com.online_store.stubs.product.Type;
@@ -44,9 +45,13 @@ public class OrderServiceImpl extends OrderServiceGrpc.OrderServiceImplBase {
         OrderResponse.Builder orderResponse = OrderResponse.newBuilder();
         ProductsResponse.Builder productsResponse = ProductsResponse.newBuilder();
         for (Product product : order.get().getProductList()) {
+            Category category = Category.newBuilder().setId(product.getCategory().getId())
+                    .setLabel(product.getCategory().getLabel())
+                    .setIdParent(product.getCategory().getParentId()).build();
             productsResponse.addProductResponse(
                     ProductResponse.newBuilder()
                             .setId(product.getId())
+                            .setCategory(category)
                             .setLabel(product.getLabel())
                             .setType(Type.valueOf(product.getType().name())).build()
             );
@@ -67,10 +72,14 @@ public class OrderServiceImpl extends OrderServiceGrpc.OrderServiceImplBase {
         OrderResponse.Builder orderResponse = OrderResponse.newBuilder();
         ProductsResponse.Builder productsResponse = ProductsResponse.newBuilder();
         for (Product product : order.getProductList()) {
+            Category category = Category.newBuilder().setId(product.getCategory().getId())
+                    .setLabel(product.getCategory().getLabel())
+                    .setIdParent(product.getCategory().getParentId()).build();
             productsResponse.addProductResponse(
                     ProductResponse.newBuilder()
                             .setId(product.getId())
                             .setLabel(product.getLabel())
+                            .setCategory(category)
                             .setType(Type.valueOf(product.getType().name())).build()
             );
         }

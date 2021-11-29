@@ -22,4 +22,9 @@ public class Category {
 
     @OneToOne
     private Category parent;
+
+    public Long getParentId() {
+        if (parent == null) return 0L;
+        return parent.getId();
+    }
 }
