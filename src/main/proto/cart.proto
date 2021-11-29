@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+import "product.proto";
+import "google/protobuf/empty.proto";
+
+package com.online_store.stubs.product.cart;
+
+option java_multiple_files = true;
+
+message AddProductRequest {
+    int64 id = 1;
+}
+
+message Cart {
+    int64 id = 1;
+    Status status = 2;
+    ProductsResponse productsResponse = 3;
+}
+
+enum Status {
+    PENDING = 0;
+    FINISHED = 1;
+}
+
+service CartService {
+  rpc addOneProduct(AddProductRequest) returns (Cart);
+
+  rpc getCart(google.protobuf.Empty) returns (Cart);
+
+}

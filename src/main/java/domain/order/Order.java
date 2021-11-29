@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @AllArgsConstructor
@@ -14,8 +15,9 @@ import java.util.List;
 @Entity
 @Data
 @Table(name="product_order")
-public class Order {
+public class Order implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToMany(targetEntity=Product.class, fetch= FetchType.EAGER)

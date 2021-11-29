@@ -28,10 +28,16 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
         productResponse.setType(Type.valueOf(product.getType().name()));
     }
 
+    private void setCommonProductResponse(Product product, ProductDetailResponse.Builder productResponse) {
+        productResponse.setId(product.getId());
+        productResponse.setLabel(product.getLabel());
+        productResponse.setType(Type.valueOf(product.getType().name()));
+    }
+
     @Override
-    public void getOneProduct(ProductRequest request, StreamObserver<ProductResponse> responseObserver) {
+    public void getOneProduct(ProductRequest request, StreamObserver<ProductDetailResponse> responseObserver) {
         Long productId = request.getId();
-        ProductResponse.Builder productResponse = ProductResponse.newBuilder();
+        ProductDetailResponse.Builder productResponse = ProductDetailResponse.newBuilder();
 
         Optional<DigitalProduct> optionalDigitalProduct = digitalProductDao.findById(productId);
         Optional<PhysicalProduct> optionalPhysicalProduct = physicalProductDao.findById(productId);
@@ -66,18 +72,17 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
             if (optionalDigitalProduct.isPresent()) {
                 DigitalProduct digitalProduct = optionalDigitalProduct.get();
                 setCommonProductResponse(digitalProduct, productResponse);
-                productResponse.setUrl(digitalProduct.getUrl());
                 productsResponse.addProductResponse(productResponse);
             }
             else if (optionalPhysicalProduct.isPresent()) {
                 PhysicalProduct physicalProduct = optionalPhysicalProduct.get();
                 setCommonProductResponse(physicalProduct, productResponse);
-                productResponse.setWeight(physicalProduct.getWeight());
                 productsResponse.addProductResponse(productResponse);
             }
             else {
                 logger.log(Level.SEVERE, "No product found with id " + productId);
                 responseObserver.onError(Status.NOT_FOUND.asRuntimeException());
+                return;
             }
         }
         responseObserver.onNext(productsResponse.build());
