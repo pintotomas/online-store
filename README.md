@@ -32,4 +32,5 @@ API for an online store with java and grpc
 - Allow to specify server ports
 - Add diagrams
 - There is some repeated code when generating some responses and on the DAO objects that can easily be refactored
+- Dockerize the server
 
