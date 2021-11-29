@@ -1,6 +1,5 @@
 package domain.order;
 
-import domain.cart.Cart;
 import domain.product.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,11 +21,11 @@ public class Order implements Serializable {
 
     @OneToMany(targetEntity=Product.class, fetch= FetchType.EAGER)
     @JoinTable(name = "order_product", joinColumns =
-    @JoinColumn(name = "id_order"))
+    @JoinColumn(name = "id_order"),
+            inverseJoinColumns = @JoinColumn(name = "id_product"))
     private List<Product> productList;
 
-    public Order(Cart cart) {
-        this.productList = cart.getProductList();
+    public Order(List<Product> products) {
+        this.productList = products;
     }
-
 }

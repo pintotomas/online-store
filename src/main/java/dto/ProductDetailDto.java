@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ProductDto {
+public class ProductDetailDto {
 
     @NotNull
     private Long id;
@@ -23,7 +23,7 @@ public class ProductDto {
 
     private Long weight;
 
-    public ProductDto(ProductDetailResponse productResponse) {
+    public ProductDetailDto(ProductDetailResponse productResponse) {
         this.id = productResponse.getId();
         this.label = productResponse.getLabel();
         this.type = Type.valueOf(productResponse.getType().name());

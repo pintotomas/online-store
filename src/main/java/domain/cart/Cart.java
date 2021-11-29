@@ -4,6 +4,7 @@ import com.sun.istack.NotNull;
 import domain.product.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -39,5 +40,13 @@ public class Cart implements Serializable {
 
     public boolean contains(Product product) {
         return productList.contains(product);
+    }
+
+    public boolean isEmpty() {
+        return productList.isEmpty();
+    }
+
+    public void finish() {
+        this.status = Status.FINISHED;
     }
 }

@@ -26,6 +26,10 @@ message ProductResponse {
     Type type = 3;
 }
 
+message ProductsDetailResponse {
+  repeated ProductDetailResponse productResponse = 1;
+}
+
 message ProductsResponse {
   repeated ProductResponse productResponse = 1;
 }
@@ -40,6 +44,6 @@ enum Type {
 service ProductService {
   rpc getOneProduct(ProductRequest) returns (ProductDetailResponse);
 
-  rpc getProducts(ProductsRequest) returns (ProductsResponse);
+  rpc getProducts(ProductsRequest) returns (ProductsDetailResponse);
 
 }

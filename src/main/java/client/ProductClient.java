@@ -1,11 +1,11 @@
 package client;
 
-import com.online_store.stubs.product.ProductDetailResponse;
-import com.online_store.stubs.product.ProductRequest;
-import com.online_store.stubs.product.ProductResponse;
-import com.online_store.stubs.product.ProductServiceGrpc;
-import dto.ProductDto;
+import com.online_store.stubs.product.*;
+import dto.ProductDetailDto;
 import io.grpc.Channel;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ProductClient {
 
@@ -16,11 +16,17 @@ public class ProductClient {
 
     }
 
-    public ProductDto getProduct(Long productId) {
+    public ProductDetailDto getProduct(Long productId) {
         ProductRequest productRequest = ProductRequest.newBuilder().setId(productId).build();
         ProductDetailResponse productResponse = productServiceBlockingStub.getOneProduct(productRequest);
 
-        // Send it to the caller, in an appropriate manner in this case as a list.
-        return new ProductDto(productResponse);
+        return new ProductDetailDto(productResponse);
+    }
+
+    public List<ProductDetailDto> getProducts(List<Long> productIds) {
+        ProductsRequest productsRequest = ProductsRequest.newBuilder().addAllId(productIds).build();
+        ProductsDetailResponse productsDetailResponse = productServiceBlockingStub.getProducts(productsRequest);
+        return productsDetailResponse.getProductResponseList().stream().map(productDetailResponse ->
+                new ProductDetailDto(productDetailResponse)).collect(Collectors.toList());
     }
 }

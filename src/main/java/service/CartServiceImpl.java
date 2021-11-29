@@ -1,7 +1,9 @@
 package service;
 
 import client.ProductClient;
-import com.online_store.stubs.product.*;
+import com.online_store.stubs.product.ProductResponse;
+import com.online_store.stubs.product.ProductsResponse;
+import com.online_store.stubs.product.Type;
 import com.online_store.stubs.product.cart.AddProductRequest;
 import com.online_store.stubs.product.cart.Cart;
 import com.online_store.stubs.product.cart.CartServiceGrpc;
@@ -9,7 +11,7 @@ import com.online_store.stubs.product.cart.Status;
 import dao.CartDao;
 import domain.product.Product;
 import domain.product.ProductFactory;
-import dto.ProductDto;
+import dto.ProductDetailDto;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
@@ -43,6 +45,26 @@ public class CartServiceImpl extends CartServiceGrpc.CartServiceImplBase {
         streamObserver.onNext(response.build());
         streamObserver.onCompleted();
     }
+
+    @Override
+    public void finishCart(com.google.protobuf.Empty request, StreamObserver<Cart> streamObserver) {
+        Optional<domain.cart.Cart> optionalCart = cartDao.getPending();
+        if (optionalCart.isEmpty()) {
+            logger.log(Level.SEVERE, "No active cart found");
+            streamObserver.onError(io.grpc.Status.NOT_FOUND.asRuntimeException());
+            return;
+        }
+        domain.cart.Cart cart = optionalCart.get();
+        if (cart.isEmpty()) {
+            logger.log(Level.INFO, "Cart is empty, cant finish cart");
+            streamObserver.onError(io.grpc.Status.ABORTED.asRuntimeException());
+            return;
+        }
+        cart.finish();
+        cartDao.save(cart);
+        sendCartResponse(cart, streamObserver);
+    }
+
     @Override
     public void getCart(com.google.protobuf.Empty request, StreamObserver<Cart> streamObserver) {
         Optional<domain.cart.Cart> optionalCart = cartDao.getPending();
@@ -82,8 +104,8 @@ public class CartServiceImpl extends CartServiceGrpc.CartServiceImplBase {
                 .build();
 
         ProductClient productClient = new ProductClient(channel);
-        ProductDto productDto = productClient.getProduct(id);
-        return ProductFactory.createProduct(productDto);
+        ProductDetailDto productDetailDto = productClient.getProduct(id);
+        return ProductFactory.createProduct(productDetailDto);
 
     }
 

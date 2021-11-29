@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "product.proto";
+
+package com.online_store.stubs.product.order;
+
+option java_multiple_files = true;
+
+message OrderRequest {
+    int64 id = 1;
+}
+
+message OrderResponse {
+    int64 id = 1;
+    ProductsResponse productsResponse = 2;
+}
+
+service OrderService {
+  rpc getOne(OrderRequest) returns (OrderResponse);
+
+  rpc create(google.protobuf.Empty) returns (OrderResponse);
+
+}

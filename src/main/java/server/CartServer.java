@@ -3,7 +3,6 @@ package server;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import service.CartServiceImpl;
-import service.ProductServiceImpl;
 
 import java.io.IOException;
 import java.util.logging.Level;

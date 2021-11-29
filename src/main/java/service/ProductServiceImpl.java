@@ -8,6 +8,7 @@ import domain.product.PhysicalProduct;
 import domain.product.Product;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -20,13 +21,6 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
     private PhysicalProductDao physicalProductDao = new PhysicalProductDao();
 
     private static final Logger logger = Logger.getLogger(ProductServiceImpl.class.getName());
-
-
-    private void setCommonProductResponse(Product product, ProductResponse.Builder productResponse) {
-        productResponse.setId(product.getId());
-        productResponse.setLabel(product.getLabel());
-        productResponse.setType(Type.valueOf(product.getType().name()));
-    }
 
     private void setCommonProductResponse(Product product, ProductDetailResponse.Builder productResponse) {
         productResponse.setId(product.getId());
@@ -62,21 +56,23 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
     }
 
     @Override
-    public void getProducts(ProductsRequest request, StreamObserver<ProductsResponse> responseObserver) {
+    public void getProducts(ProductsRequest request, StreamObserver<ProductsDetailResponse> responseObserver) {
         List<Long> ids = request.getIdList();
-        ProductsResponse.Builder productsResponse = ProductsResponse.newBuilder();
+        ProductsDetailResponse.Builder productsResponse = ProductsDetailResponse.newBuilder();
         for (Long productId : ids) {
             Optional<DigitalProduct> optionalDigitalProduct = digitalProductDao.findById(productId);
             Optional<PhysicalProduct> optionalPhysicalProduct = physicalProductDao.findById(productId);
-            ProductResponse.Builder productResponse = ProductResponse.newBuilder();
+            ProductDetailResponse.Builder productResponse = ProductDetailResponse.newBuilder();
             if (optionalDigitalProduct.isPresent()) {
                 DigitalProduct digitalProduct = optionalDigitalProduct.get();
                 setCommonProductResponse(digitalProduct, productResponse);
+                productResponse.setUrl(digitalProduct.getUrl());
                 productsResponse.addProductResponse(productResponse);
             }
             else if (optionalPhysicalProduct.isPresent()) {
                 PhysicalProduct physicalProduct = optionalPhysicalProduct.get();
                 setCommonProductResponse(physicalProduct, productResponse);
+                productResponse.setWeight(physicalProduct.getWeight());
                 productsResponse.addProductResponse(productResponse);
             }
             else {

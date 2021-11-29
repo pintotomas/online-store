@@ -1,27 +1,27 @@
 package domain.product;
 
-import dto.ProductDto;
+import dto.ProductDetailDto;
 import exceptions.InvalidProductException;
 
 public class ProductFactory {
 
-    private static void setCommonProductAttributes(Product product, ProductDto productDto) {
-        product.setId(productDto.getId());
-        product.setLabel(productDto.getLabel());
-        product.setType(productDto.getType());
+    private static void setCommonProductAttributes(Product product, ProductDetailDto productDetailDto) {
+        product.setId(productDetailDto.getId());
+        product.setLabel(productDetailDto.getLabel());
+        product.setType(productDetailDto.getType());
     }
 
-    public static Product createProduct(ProductDto productDto) {
+    public static Product createProduct(ProductDetailDto productDetailDto) {
 
-        if (productDto.getUrl().isEmpty()) {
+        if (productDetailDto.getUrl().isEmpty()) {
             PhysicalProduct physicalProduct = new PhysicalProduct();
-            physicalProduct.setWeight(productDto.getWeight());
-            setCommonProductAttributes(physicalProduct, productDto);
+            physicalProduct.setWeight(productDetailDto.getWeight());
+            setCommonProductAttributes(physicalProduct, productDetailDto);
             return physicalProduct;
-        } else if (productDto.getWeight().equals(0L)) {
+        } else if (productDetailDto.getWeight().equals(0L)) {
             DigitalProduct digitalProduct = new DigitalProduct();
-            setCommonProductAttributes(digitalProduct, productDto);
-            digitalProduct.setUrl(productDto.getUrl());
+            setCommonProductAttributes(digitalProduct, productDetailDto);
+            digitalProduct.setUrl(productDetailDto.getUrl());
             return digitalProduct;
         }
         throw new InvalidProductException();

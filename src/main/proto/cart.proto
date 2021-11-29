@@ -23,6 +23,8 @@ enum Status {
 }
 
 service CartService {
+  rpc finishCart(google.protobuf.Empty) returns (Cart);
+
   rpc addOneProduct(AddProductRequest) returns (Cart);
 
   rpc getCart(google.protobuf.Empty) returns (Cart);
